@@ -1,11 +1,11 @@
-#define ARM_MATH_CM3
-#include <arm_math.h>
+#define ARM_MATH_CM3  
+#include <arm_math.h> //Libería de operaciones matemáticas
 #define tamSig1 640
 #define tamSig2 500
 #define tam_impulse 29
-extern float32_t sig1[tamSig1];
-extern float32_t sig2[tamSig2];
-extern float32_t Impulse_response[tam_impulse];
+extern float32_t sig1[tamSig1]; //Llamado de la primera señal
+extern float32_t sig2[tamSig2]; //Llamado de la segunda señal
+extern float32_t Impulse_response[tam_impulse]; //Llamado de la señal de impulso
 float32_t REX1 [tamSig1 / 2];
 float32_t IDX1 [tamSig1 / 2];
 float32_t REX2 [tamSig2 / 2];
@@ -48,7 +48,7 @@ void loop() {
     plot_doble(sigOut_sum, sigOut_res, tamSig1);*/
 }
 
-void des_estand() {
+void des_estand() { //Método de resolución de la desviación estandard
   arm_var_f32(&sig1[0], tamSig1, &var1);
   desv1 = sqrt(var1);
   arm_var_f32(&sig2[0], tamSig2, &var2);
@@ -63,7 +63,7 @@ void des_estand() {
   Serial.println(desv2);
 }
 
-void plot_doble(float32_t *sigIn1, float32_t *sigIn2, uint32_t tamSig) {
+void plot_doble(float32_t *sigIn1, float32_t *sigIn2, uint32_t tamSig) {  //Ploteo de 2 señales sucesivamente
   uint32_t i;
   for (i = 0; i < tamSig; i++) {
     Serial.print(sigIn1[i] * 100 + 10);
@@ -73,19 +73,19 @@ void plot_doble(float32_t *sigIn1, float32_t *sigIn2, uint32_t tamSig) {
   }
 }
 
-void suma(float32_t *input, float32_t *output, uint32_t tam) {
+void suma(float32_t *input, float32_t *output, uint32_t tam) {  //Método de suma
   for (uint32_t i = 0; i < tam; i++) {
     output[i] = input[i] + output[i - 1];
   }
 }
 
-void resta(float32_t *input, float32_t *output, uint32_t tam) {
+void resta(float32_t *input, float32_t *output, uint32_t tam) { //Método de resta
   for (uint32_t i = 0; i < tam; i++) {
     output[i] = input[i] - output[i - 1];
   }
 }
 
-void plot(float32_t *sigIn, uint32_t tamSig) {
+void plot(float32_t *sigIn, uint32_t tamSig) {  //Ploteo de una señal
   uint32_t i;
   for (i = 0; i < tamSig; i++) {
     Serial.println(sigIn[i] * 100);
@@ -93,7 +93,7 @@ void plot(float32_t *sigIn, uint32_t tamSig) {
   }
 }
 
-void fourier(float32_t *input_sig, float32_t *sig_rex, float32_t *sig_idx, uint32_t tam) {
+void fourier(float32_t *input_sig, float32_t *sig_rex, float32_t *sig_idx, uint32_t tam) {  //Método de la Transformada discreta de fourier
   uint32_t i, j, k;
 
   for (j = 0; j < tam / 2; j++) {
@@ -109,14 +109,14 @@ void fourier(float32_t *input_sig, float32_t *sig_rex, float32_t *sig_idx, uint3
   }
 }
 
-void get_tdf(float32_t *sig_rex, float32_t *sig_idx, float32_t *sigOut, uint32_t tam) {
+void get_tdf(float32_t *sig_rex, float32_t *sig_idx, float32_t *sigOut, uint32_t tam) { //Método para obtener la TDF
   uint32_t i;
   for (i = 0; i < tam / 2; i++) {
     sigOut[i] = sqrt(pow(sig_rex[i], 2) + pow(sig_idx[i], 2));
   }
 }
 
-void plot_tdf(float32_t *sigIn, uint32_t tam) {
+void plot_tdf(float32_t *sigIn, uint32_t tam) { //Ploteo de TDF
   uint32_t i;
   for (i = 0; i < tam / 2; i++) {
     Serial.println(sigIn[i]);
